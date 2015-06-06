@@ -455,53 +455,61 @@ var endings = [
   'y',
 ];
 
-function generateWords(n) {
-
-  if (n > 1000) {
-    alert('Too many.');
-    input.value = '';
-    return false;
-  }
+function generateOneWord() {
 
   var randA = randomInt(startConsonants.length - 1);
   var a = startConsonants[randA];
   var randB = randomInt(endings.length - 1);
   var b = endings[randB];
-  var result = a + b;
+  return a + b;
 
-  for (var i = 0; i < n; i++) {
-    resultDiv.innerHTML += result + '<br>';
-    randA = randomInt(startConsonants.length - 1);
-    a = startConsonants[randA];
-    randB = randomInt(endings.length - 1);
-    b = endings[randB];
-    result = a + b;
+}
+
+function generateWords(n) {
+
+  if (n > 1000) {
+    alert('Too many.');
+    input.value = '';
+    return '';
   }
 
+  var text = '';
+  var result = generateOneWord();
+
+  for (var i = 0; i < n; i++) {
+    text += result + '<br>';
+    result = generateOneWord();
+  }
+
+  return text;
 }
 
 function handleEnter(e) {
   if (e.keyCode == 13 && isInt(input.value) && input.value > 0) {
     resultDiv.innerHTML = '';
-    generateWords(input.value);
+    resultDiv.innerHTML = generateWords(input.value);
   } 
 }
 
 function handleClick() {
   if (isInt(input.value) && input.value > 0) {
     resultDiv.innerHTML = '';
-    generateWords(input.value);
+    resultDiv.innerHTML = generateWords(input.value);
   } 
 }
 
 
-// exceptions:
+// unnatural:
 // 
 // yy
 // quu-
 // quy
 // blalm
+// sprark
+// trire, scrir, drarl etc
 
+// rules:
+// if r or l follows initial consonant, don't have it again before final one
 
 
 input.addEventListener('keypress', handleEnter, false);
